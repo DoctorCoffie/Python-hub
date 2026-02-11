@@ -49,6 +49,27 @@ Set credentials via env vars:
 docker build -t python-hub:latest .
 ```
 
+## Production (Kubernetes + ArgoCD)
+
+This repo builds a production image with GitHub Actions and pushes it to GHCR:
+
+- Image: `ghcr.io/<org>/phub1.0:latest`
+- Immutable tag: `ghcr.io/<org>/phub1.0:<git-sha>`
+
+Use the immutable tag in your ArgoCD manifests.
+
+### GitHub Actions
+
+Workflow: `.github/workflows/build-and-push.yml`
+
+Required permissions:
+
+- `packages: write`
+
+Optional secrets for scanning:
+
+- `SNYK_TOKEN`
+
 ## Image replacement safety
 
 The app is stateless. All data is stored in Postgres (volume `postgres_data`).
