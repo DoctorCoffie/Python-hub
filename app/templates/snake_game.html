@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Snake Game - Python Hub</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <section class="panel">
+        <div class="panel-head">
+          <h1>Snake Game</h1>
+          <a href="/" class="link">Back to hub</a>
+        </div>
+        <div class="game">
+          <div class="game-head">
+            <div>
+              <p class="eyebrow">Play</p>
+              <h2>Slither, grow, and save your score.</h2>
+              <p class="lede">Use arrow keys to move. The page will not scroll.</p>
+            </div>
+            <div class="game-stats">
+              <div>Score: <span id="score">0</span></div>
+              <div>Time: <span id="time">0</span>s</div>
+            </div>
+          </div>
+          <div class="game-board">
+            <canvas id="game-canvas" width="420" height="420"></canvas>
+            <div class="game-actions">
+              <label class="game-name">
+                Your name
+                <input id="player-name" type="text" placeholder="python-fan" />
+              </label>
+              <button class="btn" id="start-game">Start game</button>
+              <p id="game-message" class="notice"></p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+    <script src="/static/snake.js"></script>
+  </body>
+</html>

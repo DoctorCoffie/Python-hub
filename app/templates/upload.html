@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Upload - Python Hub</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <section class="panel">
+        <div class="panel-head">
+          <h1>Upload a python</h1>
+          <a href="/" class="link">Back to hub</a>
+        </div>
+        {% if error %}
+        <div class="notice error">{{ error }}</div>
+        {% endif %}
+        <form method="post" enctype="multipart/form-data" class="form">
+          <label>
+            Python image
+            <input type="file" name="python_image" accept="image/*" />
+          </label>
+          <label>
+            Or describe your python
+            <textarea name="python_text" rows="5" placeholder="Green, 2 meters, loves sun."></textarea>
+          </label>
+          <button class="btn" type="submit">Measure my python</button>
+        </form>
+      </section>
+    </main>
+  </body>
+</html>

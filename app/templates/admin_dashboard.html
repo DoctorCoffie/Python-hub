@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Admin - Python Hub</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <section class="panel">
+        <div class="panel-head">
+          <h1>Admin dashboard</h1>
+          <a href="/admin/logout" class="link">Sign out</a>
+        </div>
+        <div class="admin-section">
+          <h2>Recent uploads</h2>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>When</th>
+                  <th>Type</th>
+                  <th>Filename</th>
+                  <th>Size</th>
+                  <th>Text length</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for upload in uploads %}
+                <tr>
+                  <td>{{ upload.created_at }}</td>
+                  <td>{{ upload.kind }}</td>
+                  <td>{{ upload.filename or "-" }}</td>
+                  <td>
+                    {% if upload.width and upload.height %}
+                    {{ upload.width }}x{{ upload.height }}
+                    {% else %}
+                    -
+                    {% endif %}
+                  </td>
+                  <td>{{ upload.text_length or "-" }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="admin-section">
+          <h2>Snake logins</h2>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>When</th>
+                  <th>Username</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for login in logins %}
+                <tr>
+                  <td>{{ login.created_at }}</td>
+                  <td>{{ login.username }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="admin-section">
+          <h2>Snake game scores</h2>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>When</th>
+                  <th>Player</th>
+                  <th>Score</th>
+                  <th>Duration (s)</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for score in scores %}
+                <tr>
+                  <td>{{ score.created_at }}</td>
+                  <td>{{ score.player_name }}</td>
+                  <td>{{ score.score }}</td>
+                  <td>{{ score.duration_seconds }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

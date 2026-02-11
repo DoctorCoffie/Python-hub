@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Snake Login - Python Hub</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <section class="panel">
+        <div class="panel-head">
+          <h1>Snake game login</h1>
+          <a href="/" class="link">Back to hub</a>
+        </div>
+        {% if message %}
+        <div class="notice">{{ message }}</div>
+        {% endif %}
+        <form method="post" class="form">
+          <label>
+            Username
+            <input type="text" name="username" placeholder="cobra_kai" required />
+          </label>
+          <button class="btn" type="submit">Enter game lobby</button>
+        </form>
+      </section>
+    </main>
+  </body>
+</html>

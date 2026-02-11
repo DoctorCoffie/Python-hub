@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Result - Python Hub</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <section class="panel">
+        <div class="panel-head">
+          <h1>Python size report</h1>
+          <a href="/upload" class="link">Upload another</a>
+        </div>
+        <div class="result">
+          {% if message %}
+          <p class="wow">{{ message }}</p>
+          {% endif %}
+          {% if result.kind == "image" %}
+          <p>
+            Image: <strong>{{ result.filename }}</strong>
+          </p>
+          <p>
+            Size: <strong>{{ result.width }}</strong> x <strong>{{ result.height }}</strong> pixels
+          </p>
+          {% else %}
+          <p>
+            Description length: <strong>{{ result.text_length }}</strong> characters
+          </p>
+          {% endif %}
+        </div>
+        <a class="btn ghost" href="/">Back to hub</a>
+      </section>
+    </main>
+  </body>
+</html>

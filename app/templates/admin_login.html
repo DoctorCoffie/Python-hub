@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Admin Login - Python Hub</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <section class="panel">
+        <div class="panel-head">
+          <h1>Admin login</h1>
+          <a href="/" class="link">Back to hub</a>
+        </div>
+        {% if error %}
+        <div class="notice error">{{ error }}</div>
+        {% endif %}
+        <form method="post" class="form">
+          <label>
+            Username
+            <input type="text" name="username" autocomplete="username" required />
+          </label>
+          <label>
+            Password
+            <input type="password" name="password" autocomplete="current-password" required />
+          </label>
+          <button class="btn" type="submit">Sign in</button>
+        </form>
+      </section>
+    </main>
+  </body>
+</html>
