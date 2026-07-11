@@ -1,18 +1,21 @@
 from io import BytesIO
+import hashlib
 import os
 import random
 
-from fastapi import Depends, FastAPI, File, Form, Request, UploadFile
+from fastapi import Depends, FastAPI, File, Form, HTTPException, Query, Request, UploadFile
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from PIL import Image
 from pydantic import BaseModel
+from sqlalchemy import text
+from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import Session
 from starlette.middleware.sessions import SessionMiddleware
 
 from app.db import SessionLocal, engine
-from app.models import Base, SnakeLogin, SnakeGameScore, Upload
+from app.models import Base, SnakeGameScore, SnakeLogin, Upload
 
 app = FastAPI(title="Python Hub")
 
@@ -42,6 +45,32 @@ def on_startup():
     Base.metadata.create_all(bind=engine)
 
 
+@app.get("/health/live", include_in_schema=False)
+def health_live() -> dict[str, str]:
+    return {"status": "ok"}
+
+
+@app.get("/health/ready", include_in_schema=False)
+def health_ready(db: Session = Depends(get_db)) -> dict[str, str]:
+    try:
+        db.execute(text("SELECT 1"))
+    except SQLAlchemyError as exc:
+        raise HTTPException(status_code=503, detail="database unavailable") from exc
+    return {"status": "ready"}
+
+
+if os.getenv("ENABLE_BENCHMARK_ENDPOINT", "false").lower() in {"1", "true", "yes", "on"}:
+
+    @app.get("/api/benchmark", include_in_schema=False)
+    def benchmark(
+        rounds: int = Query(default=40000, ge=1000, le=500000),
+    ) -> dict[str, str]:
+        value = b"python-hub"
+        for _ in range(rounds):
+            value = hashlib.sha256(value).digest()
+        return {"digest": value.hex()}
+
+
 @app.get("/", response_class=HTMLResponse)
 def index(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
@@ -65,6 +94,7 @@ def admin_login_submit(
     if username == ADMIN_USERNAME and password == ADMIN_PASSWORD:
         request.session["admin"] = True
         return RedirectResponse("/admin", status_code=303)
+
     return templates.TemplateResponse(
         "admin_login.html",
         {"request": request, "error": "Invalid credentials."},
@@ -139,6 +169,7 @@ def snake_login_submit(
     login = SnakeLogin(username=username)
     db.add(login)
     db.commit()
+
     return templates.TemplateResponse(
         "snake_login.html",
         {"request": request, "message": f"Welcome, {username}."},
@@ -171,6 +202,7 @@ def upload_submit(
         image_bytes = python_image.file.read()
         image = Image.open(BytesIO(image_bytes))
         width, height = image.size
+
         upload = Upload(
             kind="image",
             filename=python_image.filename,
@@ -181,6 +213,7 @@ def upload_submit(
         )
         db.add(upload)
         db.commit()
+
         result = {
             "kind": "image",
             "filename": python_image.filename,
@@ -190,6 +223,7 @@ def upload_submit(
     elif python_text and python_text.strip():
         clean_text = python_text.strip()
         text_length = len(clean_text)
+
         upload = Upload(
             kind="text",
             text_content=clean_text,
@@ -197,6 +231,7 @@ def upload_submit(
         )
         db.add(upload)
         db.commit()
+
         result = {
             "kind": "text",
             "text_length": text_length,
